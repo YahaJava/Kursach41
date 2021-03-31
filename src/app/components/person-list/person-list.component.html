@@ -1,0 +1,13 @@
+<div class="d-flex flex-column">
+  <h2 class="text-center mt-2">Select person</h2>
+  <input class="form-control mb-2 mt-1 " type="search" placeholder="Search" [(ngModel)]="searchValue" (keyup)="searchPersons()">
+  <div *ngFor="let person of searchList"
+       [ngClass]="person.id===selected?'person-item selected':'person-item'"
+  (click)="selectPerson(person)">
+    {{person.name}}
+  </div>
+  <div *ngIf="searchList.length===0">
+    <div class="text-center mt-2 alert alert-danger">Not found any results</div>
+  </div>
+</div>
+

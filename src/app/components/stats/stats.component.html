@@ -1,0 +1,9 @@
+<div class="stats-wrapper">
+  <h2>{{project.title}}</h2>
+  <div>
+    <progress-bar [progress]="progress" [color]="'green'"></progress-bar>
+    {{tasksDone}}/{{tasksAmount}}
+  </div>
+  <h3>Complete {{progress}}%</h3>
+  <div id="chartContainer" style="height: 370px; width: 100%; margin-left:auto;margin-right:auto;"></div>
+</div>

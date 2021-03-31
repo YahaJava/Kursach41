@@ -1,0 +1,10 @@
+
+.list {
+  width: 20%;
+}
+
+.info {
+  width: 70%;
+  margin: 0 30px;
+  border: 2px solid silver;
+}

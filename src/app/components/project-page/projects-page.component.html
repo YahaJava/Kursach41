@@ -1,0 +1,9 @@
+<div class="d-flex mt-4">
+  <div class="list">
+    <app-project-list [projects]="projects" [selected]="chosenProject"></app-project-list>
+  </div>
+  <div class="info">
+    <app-project-info *ngIf="chosenProject" [project]="chosenProject"></app-project-info>
+  </div>
+</div>
+

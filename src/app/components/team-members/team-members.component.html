@@ -1,0 +1,70 @@
+<div class="team-members-wrapper">
+  <h2>Team members:</h2>
+  <div *ngIf="isManager && project.status!=='Done'" class="member-wrapper clickable" (click)="openModal(template)">
+    <img class = "team-member-photo" src = "https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcQeZ4Oy85d4dsA4XCgtGh17uRtn_ye3vJQphA&usqp=CAU">
+    <div class="pl-3">
+      <h3>Management</h3>
+    </div>
+  </div>
+  <div *ngFor = "let person of team;index as i">
+    <div class="member-wrapper clickable" *ngIf="i < 6 || toggleAll" (click)="goToPersonPage(person)">
+      <img class = "team-member-photo" [src] = "person.photo?person.photo:'https://www.xovi.com/wp-content/plugins/all-in-one-seo-pack/images/default-user-image.png'">
+      <div class="d-flex flex-column pl-3">
+        <h3>{{person.name}}</h3>
+        <h4>{{person.position}}</h4>
+      </div>
+    </div>
+  </div>
+  <div *ngIf="team.length > 6 && !toggleAll" class = "more" (click)="toggle()">
+    <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-arrow-down" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+      <path fill-rule="evenodd" d="M8 1a.5.5 0 0 1 .5.5v11.793l3.146-3.147a.5.5 0 0 1 .708.708l-4 4a.5.5 0 0 1-.708 0l-4-4a.5.5 0 0 1 .708-.708L7.5 13.293V1.5A.5.5 0 0 1 8 1z"/>
+    </svg>
+  </div>
+  <div *ngIf="toggleAll" class = "more" (click)="toggle()">
+    <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-arrow-up" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+      <path fill-rule="evenodd" d="M8 15a.5.5 0 0 0 .5-.5V2.707l3.146 3.147a.5.5 0 0 0 .708-.708l-4-4a.5.5 0 0 0-.708 0l-4 4a.5.5 0 1 0 .708.708L7.5 2.707V14.5a.5.5 0 0 0 .5.5z"/>
+    </svg>
+  </div>
+</div>
+
+<ng-template #template>
+  <div class="modal-header d-flex flex-column">
+    <button type="button" class="close pull-right" aria-label="Close" (click)="closeModal()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+    <h2 class="modal-title pull-left">Add new person or remove current</h2>
+    <!--<h2 *ngIf="stepOfModal==='2'" class="modal-title pull-left">Select Position for {{selectedPerson.name}}</h2>-->
+  </div>
+  <div class="modal-body">
+    <div *ngIf="modalSpinnerStatus">
+      <div class="text-center">
+        <div class="spinner-border" style="width: 3rem; height: 3rem;" role="status">
+          <span class="sr-only">Loading...</span>
+        </div>
+      </div>
+    </div>
+    <div *ngIf="!modalSpinnerStatus">
+        <input [(ngModel)]="searchValue" class="form-control mb-3" type="search" placeholder="Search" (keyup)="searchPersons()">
+        <div *ngFor = "let person of searchList;index as i">
+          <div class="member-wrapper" *ngIf="i < 5">
+            <img class = "team-member-photo" [src] = "person.photo?person.photo:'https://www.xovi.com/wp-content/plugins/all-in-one-seo-pack/images/default-user-image.png'">
+            <div class="d-flex flex-column pl-3 w-75">
+              <h3>{{person.name}}</h3>
+              <h4 *ngIf="checkTeamMemberOnExisting(person)">Already in this team</h4>
+            </div>
+            <img class="clickable" width="30px" *ngIf="!checkTeamMemberOnExisting(person)" src="../../../assets/add.png" (click)="addPersonToTeam(person)">
+            <img class="clickable" width="30px" *ngIf="checkTeamMemberOnExisting(person)" src="../../../assets/delete.png" (click)="removeFromTeam(person)">
+          </div>
+        </div>
+        <div *ngIf = "!searchList.length">
+          <div class="alert alert-danger">Not found person on this search request</div>
+        </div>
+    <!--  <div *ngIf="stepOfModal==='2'">
+        <select class="form-control" [(ngModel)]="selectedPosition">
+          <option *ngFor = 'let option of selectOptions'>{{option}}</option>
+        </select>
+        <button type="button" class="btn btn-primary mt-3 float-right" (click)="addPersonToTeam()">Add person to project</button>
+      </div>-->
+    </div>
+  </div>
+</ng-template>

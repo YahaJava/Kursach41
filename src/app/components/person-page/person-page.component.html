@@ -1,0 +1,6 @@
+<div class="d-flex mt-3">
+  <app-person-list class="w-25" [personList]="persons" [sel]="chosenPerson"></app-person-list>
+  <app-person-info class="w-75" *ngIf="chosenPerson" [person]="chosenPerson" [spinnerStatus]="isInfoLoading"></app-person-info>
+  <h1 class="no-person-chosen" *ngIf="!chosenPerson"><= Choose person to view</h1>
+</div>
+

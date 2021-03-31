@@ -1,0 +1,132 @@
+<div class="project-info-wrapper">
+  <div class="main-info-wrapper">
+    <h2 class="project-info-title">{{project.title}}</h2>
+    <div>
+      <progress-bar [progress]="progress" [color]="'green'"></progress-bar>
+      {{tasksDone}}/{{tasksAmount}}
+    </div>
+    <h3>Complete {{progress}}%</h3>
+    <div class="d-flex align-items-center" *ngIf="isManager">
+      <button class="btn btn-primary w-25" (click)="gotoStats()">Show Stats</button>
+      <button class="btn btn-primary w-25 ml-4" (click)="gotoEstimation()">Estimate team</button>
+    </div>
+    <div *ngIf="progress==='100.00' && project.status!=='Done'" class="d-flex align-items-center">
+      <div class="text-success">
+        All Tasks are done! Project are ready for deploy!
+      </div>
+      <button *ngIf="isManager" class="btn btn-success ml-4" (click)="submit()">Submit</button>
+    </div>
+    <div class="project-info-description mt-2">{{project.description}}</div>
+    <div class="d-flex align-items-center mt-2">
+      <h3 class="project-info-tasks-wrapper">Tasks:</h3>
+      <div class="ml-2 badge badge-info clickable" *ngIf="isManager" (click)="changeAddStatus()">Add task</div>
+    </div>
+    <table class="table table-bordered mt-2">
+      <tr>
+        <td class="w-50"><h4>Name of task</h4></td>
+        <td class="w-25"><h4>Assignee to</h4></td>
+        <td class="w-25"><h4>Status</h4></td>
+      </tr>
+      <tr *ngFor="let task of project.tasks"
+          [ngClass]="task.status==='done'?'tr-done':'tr-undone'"
+          (mouseenter)="changeEditingTask(task)"
+          (mouseleave)="changeEditingTask()">
+        <td>
+          <div *ngIf="editStatus && editingTask===task">
+            <form [formGroup]="editForm">
+              <input formControlName="name" class="form-control mb-2" placeholder="Task name">
+              <div *ngIf="editForm.controls['name'].invalid && editForm.controls['name'].touched"
+                   class="alert alert-danger">Enter task name
+              </div>
+              <input formControlName="link" class="form-control" placeholder="JIRA link">
+            </form>
+
+          </div>
+          <div class="d-flex" *ngIf="!editStatus || editingTask!==task">
+            <a [href]="task.link">{{task.name}}</a>
+            <div class="d-flex align-items-center ml-3"
+                 *ngIf="isManager && editingTask===task && task.status=='undone'">
+              <div class="mr-2 badge badge-info clickable" (click)="changeEditStatus(task)">Edit</div>
+              <div class="mr-2 badge badge-info clickable" (click)="deleteTask(task)">Delete</div>
+            </div>
+          </div>
+        </td>
+        <td style="vertical-align: inherit">
+          <div *ngIf="editStatus && editingTask===task">
+            <div class="mb-1 text-center">{{chosenAssigner ? chosenAssigner.name : task.person ? task.person.name : ''}}</div>
+            <button class="btn btn-primary w-100" (click)="openModal(template)">Choose</button>
+          </div>
+          <div *ngIf="!editStatus || editingTask!==task">
+            {{task.person ? task.person.name : 'Nobody'}}
+          </div>
+        </td>
+        <td style="vertical-align: inherit">
+          <div *ngIf="editStatus && editingTask===task" class="d-flex flex-column">
+            <button class="btn btn-success mb-2" [disabled]="!editForm.valid" (click)="editTask(task)">Edit</button>
+            <button class="btn btn-danger" (click)="resetStatus()">Cancel</button>
+          </div>
+          <div  class="d-flex align-items-center" *ngIf="!editStatus || editingTask!==task">
+            <div>{{task.status}}</div>
+            <div class="ml-2 badge badge-success clickable"
+                 *ngIf="isManager && editingTask===task && task.status=='undone'"
+                 (click)="changeTaskStatus(task,'undone')">Mark as done
+            </div>
+            <div class="ml-2 badge badge-danger clickable"
+                 *ngIf="isManager && editingTask===task && task.status=='done' && project.status!=='Done'"
+                 (click)="changeTaskStatus(task,'done')">Mark as undone
+            </div>
+          </div>
+        </td>
+      </tr>
+      <tr *ngIf="addStatus">
+        <td>
+          <form [formGroup]="editForm">
+            <input formControlName="name" class="form-control mb-2" placeholder="Task name">
+            <div *ngIf="editForm.controls['name'].invalid && editForm.controls['name'].touched"
+                 class="alert alert-danger">Enter task name
+            </div>
+            <input formControlName="link" class="form-control" placeholder="JIRA link">
+          </form>
+        </td>
+        <td style="vertical-align: inherit">
+          <div class="mb-1 text-center" *ngIf="chosenAssigner">{{chosenAssigner.name}}</div>
+          <button class="btn btn-primary w-100" (click)="openModal(template)">Choose</button>
+        </td>
+        <td style="vertical-align: inherit">
+          <button class="btn btn-success mb-2 w-100" [disabled]="!editForm.valid" (click)="addTask()">Add Task</button>
+          <button class="btn btn-danger w-100" (click)="resetStatus()">Cancel</button>
+        </td>
+      </tr>
+    </table>
+  </div>
+  <div class="participants-wrapper">
+    <app-team-members [team]="project.team" [project]="project"></app-team-members>
+  </div>
+</div>
+
+<ng-template #template>
+  <div class="modal-header d-flex flex-column">
+    <button type="button" class="close pull-right" aria-label="Close" (click)="closeModal()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+    <h2 class="modal-title pull-left">Assignee person to this task</h2>
+  </div>
+  <div class="modal-body">
+    <div>
+      <input [(ngModel)]="searchValue" class="form-control mb-3" type="search" placeholder="Search"
+             (keyup)="searchPersons()">
+      <div *ngFor="let person of searchList;index as i" (click)="setAssigner(person)">
+        <div class="member-wrapper clickable" *ngIf="i < 5">
+          <img class="team-member-photo"
+               [src]="person.photo?person.photo:'https://www.xovi.com/wp-content/plugins/all-in-one-seo-pack/images/default-user-image.png'">
+          <div class="d-flex flex-column pl-3 w-75">
+            <h3>{{person.name}}</h3>
+          </div>
+        </div>
+      </div>
+      <div *ngIf="!searchList.length">
+        <div class="alert alert-danger">Not found person on this search request</div>
+      </div>
+    </div>
+  </div>
+</ng-template>

@@ -1,1 +1,57 @@
-/* You can add global styles to this file, and also import other style files */
+body {
+  background-color: #E7EAED !important;
+  font-size: 15px;
+}
+
+h1 {
+  font-size: 32px;
+  color: #3E34BC;
+  font-weight: bolder;
+}
+
+h2 {
+  font-size: 24px;
+  color: #3E34BC;
+  font-weight: bolder;
+}
+
+h3 {
+  font-size: 20px;
+  color: #3E34BC;
+  font-weight: bolder;
+}
+
+h4 {
+  font-size: 16px;
+  color: #3E34BC;
+  font-weight: bolder;
+}
+
+.clickable {
+  cursor: pointer;
+}
+
+.text-success {
+  font-size: 20px;
+  color: #28A745;
+  font-weight: bolder;
+}
+
+.progress-outer {
+  width: 20% !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  border: 0 !important;
+  font-size: 0 !important;
+  background-color: lightgray !important;
+}
+
+.progress-inner {
+  min-height: 12px !important;
+  max-height: 12px;
+}
+
+.rating {
+  color: #3E34BC;
+  font-size: 24px;
+}

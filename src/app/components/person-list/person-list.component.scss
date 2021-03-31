@@ -1,0 +1,17 @@
+@import "~src/app/app.component";
+
+.person-item {
+  border: lightgrey 1px solid;
+  text-align: center;
+  background-color: #3E34BC;
+  color: white;
+  font-size: 18px;
+  font-weight: bolder;
+  padding: 5px;
+  cursor: pointer;
+}
+
+.selected {
+  background-color: white;
+  color: black;
+}

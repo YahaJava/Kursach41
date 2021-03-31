@@ -1,0 +1,56 @@
+
+.project-info-wrapper {
+  display: flex;
+  justify-content: space-between;
+  background-color: white;
+  min-height: 500px;
+}
+
+.main-info-wrapper {
+  display: flex;
+  flex-direction: column;
+  text-align: justify;
+  width: 70%;
+  padding: 10px 10px 10px 30px;
+}
+
+.project-info-title {
+  margin-bottom: 15px;
+}
+
+.project-info-description {
+  text-indent: 2em;
+}
+
+.participants-wrapper {
+  width: 25%;
+}
+
+.tr-done {
+  background-color: #CEFAC1;
+}
+
+
+.team-members-wrapper {
+  padding-top: 30px;
+  padding-bottom: 20px;
+  overflow: auto;
+  max-height: 800px;
+  margin-right: 10px;
+  display: flex;
+  flex-direction: column;
+}
+
+.member-wrapper {
+  height: 75px;
+  padding: 40px 10px;
+  display: flex;
+  align-items: center;
+  border: lightgrey 1px solid;
+}
+
+.team-member-photo {
+  width: 70px;
+  border-radius: 50%;
+  height: 70px;
+}

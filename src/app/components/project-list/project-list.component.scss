@@ -1,0 +1,27 @@
+
+.project-wrapper {
+  height: 75px;
+  padding: 40px 10px;
+  display: flex;
+  justify-content: space-between;
+  background-color: #3E34BC;
+  align-items: center;
+  cursor: pointer;
+  color: white;
+  border: lightgrey 1px solid;
+}
+
+.selected {
+  background-color: #FFFFFF;
+  color: black;
+}
+
+.done {
+  background-color: #28A745;
+}
+
+.project-title {
+  margin-left: 10px;
+  font-size: 18px;
+  font-weight: bolder;
+}

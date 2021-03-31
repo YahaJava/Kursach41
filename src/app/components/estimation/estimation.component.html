@@ -1,0 +1,48 @@
+<div class="estimation-wrapper">
+  <h2>Project: {{project.title}}</h2>
+  <button class="btn btn-primary w-25 mt-4" (click)="openModal(template)">Choose person</button>
+  <h3 class="mt-4" *ngIf="selectedPerson">Person: {{selectedPerson.name}}</h3>
+  <div class="d-flex align-items-end mt-4">
+    <h3>Rating:</h3>
+    <rating [(ngModel)]="rate" class="rating ml-2"></rating>
+  </div>
+  <div class="form-group mt-4">
+    <h3>Give feedback</h3>
+    <textarea [(ngModel)]="feedback" class="form-control" rows="8"></textarea>
+  </div>
+  <div class="mt-4">
+    <button type="button"
+            class="btn btn-success w-25 float-right"
+            (click)="estimate()"
+            [disabled]="!selectedPerson || !rate">
+      Give estimation
+    </button>
+  </div>
+</div>
+
+<ng-template #template>
+  <div class="modal-header d-flex flex-column">
+    <button type="button" class="close pull-right" aria-label="Close" (click)="closeModal()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+    <h2 class="modal-title pull-left">Select Person</h2>
+  </div>
+  <div class="modal-body">
+    <div>
+      <input [(ngModel)]="searchValue" class="form-control mb-3" type="search" placeholder="Search"
+             (keyup)="searchPersons()">
+      <div *ngFor="let person of searchList;index as i" (click)="selectPerson(person)">
+        <div class="member-wrapper clickable" *ngIf="i < 5">
+          <img class="team-member-photo"
+               [src]="person.photo?person.photo:'https://www.xovi.com/wp-content/plugins/all-in-one-seo-pack/images/default-user-image.png'">
+          <div class="d-flex flex-column pl-3 w-75">
+            <h3>{{person.name}}</h3>
+          </div>
+        </div>
+      </div>
+      <div *ngIf="!searchList.length">
+        <div class="alert alert-danger">Not found person on this search request</div>
+      </div>
+    </div>
+  </div>
+</ng-template>

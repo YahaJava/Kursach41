@@ -1,0 +1,9 @@
+<div class="d-flex flex-column">
+  <h2 class="mb-2 ml-3">Projects:</h2>
+  <div [ngClass]="project===selected?'project-wrapper selected':project.status==='Done'?'project-wrapper done':'project-wrapper'"
+       (click)="projectSelected(project)" *ngFor="let project of projects">
+    <div class="project-title">{{project.title}}</div>
+    <img *ngIf="project.status==='Done'" width="72" src="../../../assets/done.png">
+  </div>
+</div>
+
